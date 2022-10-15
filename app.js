@@ -298,7 +298,7 @@ app.post("/userInvoice", urlencodedParser, async (req, res) => {
   }
 });
 
-app.post("/createInvoice", async (req, res) => {
+app.post("/createInvoice", urlencodedParser, async (req, res) => {
   try {
     // ***********************************************find User
 
@@ -470,15 +470,15 @@ app.post("/contactone", async (req, res) => {
   }
 });
 
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+  console.log(`App listening on port ${PORT}`);
+});
+
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "/client/build")));
   app.get("*", (req, res) => {
     res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
   });
 }
-
-const PORT = process.env.PORT || 3000;
-
-app.listen(PORT, () => {
-  console.log(`App listening on port ${PORT}`);
-});
