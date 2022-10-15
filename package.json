@@ -34,5 +34,8 @@
     "ts-lint": "^4.5.1",
     "ts-node-dev": "^1.0.0-pre.44",
     "typescript": "^3.7.5"
+  },
+  "engines": {
+    "node": "14.20.0"
   }
 }
