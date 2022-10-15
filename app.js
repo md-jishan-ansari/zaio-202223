@@ -125,7 +125,7 @@ app.get("/organisation", async (req, res) => {
   }
 });
 
-app.get("/invoice", async (req, res) => {
+app.get("api/invoice", async (req, res) => {
   try {
     const contacts = await xero.accountingApi.getContacts(
       req.session.activeTenant.tenantId
@@ -412,7 +412,7 @@ app.post("/createInvoice", urlencodedParser, async (req, res) => {
   }
 });
 
-app.get("/contact", urlencodedParser, async (req, res) => {
+app.get("api/contact", urlencodedParser, async (req, res) => {
   try {
     console.log(req.body.fname);
 
@@ -442,7 +442,7 @@ app.get("/contact", urlencodedParser, async (req, res) => {
   }
 });
 
-app.post("/contactone", async (req, res) => {
+app.post("api/contactone", async (req, res) => {
   try {
     const contact = {
       name: req.body,
