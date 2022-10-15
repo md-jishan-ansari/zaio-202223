@@ -22,7 +22,7 @@ const {
 
 const session = require("express-session");
 
-// const path = require("path");
+const path = require("path");
 // const __dirname = path.resolve();
 
 const urlencodedParser = bodyParser.urlencoded({ extended: false });
