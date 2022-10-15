@@ -304,54 +304,54 @@ app.post("/createInvoice", urlencodedParser, async (req, res) => {
 
     console.log("form body", req.body.email);
 
-    const response = await axios.post(`${ZAIO_DB_URL}/user`, {
-      email: req.body.email,
-    });
+    // const response = await axios.post(`${ZAIO_DB_URL}/user`, {
+    //   email: req.body.email,
+    // });
 
-    let contactID;
+    let contactID = "9bcfb99a-8865-4b5d-94ca-c6c8c9f054a8";
 
-    const user = response.data.data;
+    // const user = response.data.data;
 
-    if (user.xeroContactId) {
-      contactID = user.xeroContactId;
-    } else {
-      //  ********************************************create contact for user
+    // if (user.xeroContactId) {
+    //   contactID = user.xeroContactId;
+    // } else {
+    //   //  ********************************************create contact for user
 
-      try {
-        const contact = {
-          name: user.username + "-" + user.email,
-          firstName: user.username,
-          emailAddress: user.email,
-          phones: [
-            {
-              phoneNumber: user.phonenumber,
-              phoneType: Phone.PhoneTypeEnum.MOBILE,
-            },
-          ],
-        };
-        const contacts = {
-          contacts: [contact],
-        };
-        const response = await xero.accountingApi.createContacts(
-          req.session.activeTenant.tenantId,
-          contacts
-        );
-        contactID = response.body.contacts[0].contactID;
-      } catch (err) {
-        return res.json(err);
-      }
+    //   try {
+    //     const contact = {
+    //       name: user.username + "-" + user.email,
+    //       firstName: user.username,
+    //       emailAddress: user.email,
+    //       phones: [
+    //         {
+    //           phoneNumber: user.phonenumber,
+    //           phoneType: Phone.PhoneTypeEnum.MOBILE,
+    //         },
+    //       ],
+    //     };
+    //     const contacts = {
+    //       contacts: [contact],
+    //     };
+    //     const response = await xero.accountingApi.createContacts(
+    //       req.session.activeTenant.tenantId,
+    //       contacts
+    //     );
+    //     contactID = response.body.contacts[0].contactID;
+    //   } catch (err) {
+    //     return res.json(err);
+    //   }
 
-      //  ****************************************************** add contactID to user
+    //   //  ****************************************************** add contactID to user
 
-      try {
-        const response2 = await axios.post(`${ZAIO_DB_URL}/addXeroContactId`, {
-          email: user.email,
-          contactID,
-        });
-      } catch (err) {
-        return res.json(err);
-      }
-    }
+    //   try {
+    //     const response2 = await axios.post(`${ZAIO_DB_URL}/addXeroContactId`, {
+    //       email: user.email,
+    //       contactID,
+    //     });
+    //   } catch (err) {
+    //     return res.json(err);
+    //   }
+    // }
 
     // *****************************************************create Invoice for user
 
