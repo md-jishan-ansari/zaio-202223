@@ -76,9 +76,9 @@ const authenticationData = (req, res) => {
   };
 };
 
-// app.get("/", (req, res) => {
-//   res.send(`<a href='/connect'>Connect to Xero</a>`);
-// });
+app.get("/", (req, res) => {
+  res.send(`<a href='/connect'>Connect to Xero</a>`);
+});
 
 app.get("/connect", async (req, res) => {
   try {
