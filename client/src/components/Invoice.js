@@ -44,7 +44,6 @@ const Invoice = (props) => {
         ...prevState,
         ["username"]: nameSelectedTo[0],
         ["email"]: fill?.userid?.email,
-        ["xeroContactId"]: fill?.userid?.email?.xeroContactId,
       }));
     }
   }, [nameSelectedTo]);
@@ -68,8 +67,9 @@ const Invoice = (props) => {
   const handleOnSubmit = (event) => {
     event.preventDefault();
 
+    console.log(state);
     xeroActions.createInvoice(state).then((res) => {
-      console.log(res);
+      console.log(res, "react console");
     });
   };
 

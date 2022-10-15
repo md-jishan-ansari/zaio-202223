@@ -119,7 +119,7 @@ app.get("/organisation", async (req, res) => {
       req.session.activeTenant.tenantId
     );
     //res.send(`Hello, ${response.body.organisations[0].name}`);
-    res.render("contact");
+    res.render("invoice");
   } catch (err) {
     res.send("Sorry, something went wrong");
   }
