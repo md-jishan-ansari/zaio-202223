@@ -1,7 +1,7 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
 
-const API_URL = "http://localhost:4000";
+// const API_URL = "http://localhost:4000";
 
 const Main = () => {
   const history = useHistory();
@@ -9,12 +9,9 @@ const Main = () => {
   return (
     <>
       <h2>Xero Invoice Creation</h2>
-      <button
-        className="btn btn-primary"
-        onClick={() => history.push(`/connect`)}
-      >
+      <a className="btn btn-primary" href="/connect">
         Connect
-      </button>
+      </a>
       <button
         className="btn btn-danger ml-3"
         onClick={() => history.push("/invoice")}

@@ -106,7 +106,7 @@ app.get("/callback", async (req, res) => {
 
     const authData = authenticationData(req, res);
 
-    res.redirect("/organisation");
+    res.redirect("/invoice");
   } catch (err) {
     res.send("Sorry, something went wrong");
   }
