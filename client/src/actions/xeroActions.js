@@ -51,6 +51,7 @@ const invoice = {
     return axios
       .post("api/contact", userData)
       .then((res) => {
+        console.log(res, "createContact2");
         return res.data;
       })
       .catch((rej) => {
