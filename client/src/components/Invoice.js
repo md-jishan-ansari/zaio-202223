@@ -80,6 +80,8 @@ const Invoice = (props) => {
         ...prevState,
         ["xeroContactId"]: response,
       }));
+
+      await xeroActions.addXeroContactId(state);
     }
 
     console.log(state);
