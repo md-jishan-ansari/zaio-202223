@@ -425,7 +425,7 @@ app.post("/createInvoice", urlencodedParser, async (req, res) => {
 app.get("api/createInvoice", urlencodedParser, async (req, res) => {
   try {
     const contact = {
-      contactID: req.body.contactID,
+      contactID: req.body.xeroContactId,
     };
 
     // ************

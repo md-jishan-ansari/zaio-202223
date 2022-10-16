@@ -75,19 +75,32 @@ const Invoice = (props) => {
     console.log(user, "user");
 
     if (!user.xeroContactId) {
-      const response = await xeroActions.createContact(user);
-      setState((prevState) => ({
-        ...prevState,
-        ["xeroContactId"]: response,
-      }));
+      xeroActions
+        .createContact(user)
+        .then(async (response) => {
+          setState((prevState) => ({
+            ...prevState,
+            ["xeroContactId"]: response,
+          }));
 
-      await xeroActions.addXeroContactId(state);
+          await xeroActions.addXeroContactId(state).then((response) => {
+            xeroActions.createInvoice(state).then((res) => {
+              console.log(res, "react console");
+            });
+          });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    } else {
+      xeroActions
+        .createInvoice({ ...state, xeroContactId: user.xeroContactId })
+        .then((res) => {
+          console.log(res, "react console");
+        });
     }
 
     console.log(state);
-    // xeroActions.createInvoice(state).then((res) => {
-    //   console.log(res, "react console");
-    // });
   };
 
   return (

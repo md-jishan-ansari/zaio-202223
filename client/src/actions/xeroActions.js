@@ -50,7 +50,6 @@ const invoice = {
     return axios
       .post("api/contact", userData)
       .then((res) => {
-        console.log(res, "action res");
         return res.data;
       })
       .catch((rej) => {
@@ -59,6 +58,7 @@ const invoice = {
   },
 
   createInvoice(userData) {
+    console.log(userData, "for createInvoice");
     return axios
       .post("api/createInvoice", userData)
       .then((res) => {
