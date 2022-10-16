@@ -13,7 +13,6 @@ const Invoice = (props) => {
     description: "",
     quantity: "",
     unitPrice: "",
-    xeroContactId: "",
   });
 
   // ******************************************
@@ -76,15 +75,17 @@ const Invoice = (props) => {
       console.log(user, "user for create contact");
       xeroActions
         .createContact(user)
-        .then(async (response) => {
-          console.log(response, "contact created");
+        .then(async (contactID) => {
+          console.log(contactID, "contact created");
 
           await xeroActions
-            .addXeroContactId({ email: state.email, contactID: response })
+            .addXeroContactId({ email: state.email, contactID: contactID })
             .then((response) => {
-              xeroActions.createInvoice(state).then((res) => {
-                console.log(res, "react console");
-              });
+              xeroActions
+                .createInvoice({ ...state, xeroContactId: contactID })
+                .then((res) => {
+                  console.log(res, "react console");
+                });
             });
         })
         .catch((error) => {
