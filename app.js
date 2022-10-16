@@ -131,7 +131,7 @@ app.post("/userInvoice", urlencodedParser, async (req, res) => {
 
     console.log("form body", req.body.email);
 
-    const response = await axios.post("http://localhost:4000/user", {
+    const response = await axios.post(`${ZAIO_DB_URL}/user`, {
       email: req.body.email,
     });
 
@@ -171,13 +171,10 @@ app.post("/userInvoice", urlencodedParser, async (req, res) => {
       //  ****************************************************** add contactID to user
 
       try {
-        const response2 = await axios.post(
-          "http://localhost:4000/addXeroContactId",
-          {
-            email: user.email,
-            contactID,
-          }
-        );
+        const response2 = await axios.post(`${ZAIO_DB_URL}/addXeroContactId`, {
+          email: user.email,
+          contactID,
+        });
       } catch (err) {
         return res.json(err);
       }
@@ -240,7 +237,7 @@ app.post("/userInvoice", urlencodedParser, async (req, res) => {
     console.log("invoices: ", response3.body.invoices);
 
     try {
-      const response2 = await axios.post("http://localhost:4000/invoice", {
+      const response2 = await axios.post(`${ZAIO_DB_URL}/invoice`, {
         ...response3.body.invoices[0],
         email: req.body.email,
       });

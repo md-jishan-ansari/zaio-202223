@@ -6,6 +6,8 @@ import { Typeahead } from "react-bootstrap-typeahead";
 
 import xeroActions from "../actions/xeroActions.js";
 
+const ZAIO_DB_URL = "http://localhost:4000";
+
 const Invoice = (props) => {
   const [state, setState] = useState({
     username: "",
@@ -83,8 +85,16 @@ const Invoice = (props) => {
             .then((response) => {
               xeroActions
                 .createInvoice({ ...state, xeroContactId: contactID })
-                .then((res) => {
+                .then(async (res) => {
                   console.log(res, "react console");
+                  try {
+                    await axios.post(`${ZAIO_DB_URL}/invoice`, {
+                      ...res.invoices[0],
+                      email: user.email,
+                    });
+                  } catch (err) {
+                    return res.json(err);
+                  }
                 });
             });
         })
@@ -97,13 +107,10 @@ const Invoice = (props) => {
         .then(async (res) => {
           console.log(res, "react console");
           try {
-            const response2 = await axios.post(
-              "http://localhost:4000/invoice",
-              {
-                ...res.invoices[0],
-                email: user.email,
-              }
-            );
+            await axios.post(`${ZAIO_DB_URL}/invoice`, {
+              ...res.invoices[0],
+              email: user.email,
+            });
           } catch (err) {
             return res.json(err);
           }
