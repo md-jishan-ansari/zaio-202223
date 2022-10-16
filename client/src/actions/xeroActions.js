@@ -47,6 +47,7 @@ const invoice = {
   },
 
   createContact(userData) {
+    console.log(userData, "createContact");
     return axios
       .post("api/contact", userData)
       .then((res) => {

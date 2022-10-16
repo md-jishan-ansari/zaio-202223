@@ -72,12 +72,12 @@ const Invoice = (props) => {
     const response = await xeroActions.getUser(state.email);
     const user = response.data;
 
-    console.log(user, "user");
-
     if (!user.xeroContactId) {
+      console.log(user, "user for create contact");
       xeroActions
         .createContact(user)
         .then(async (response) => {
+          console.log(response, "contact created");
           setState((prevState) => ({
             ...prevState,
             ["xeroContactId"]: response,
