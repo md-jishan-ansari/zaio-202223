@@ -125,62 +125,6 @@ app.get("/organisation", async (req, res) => {
   }
 });
 
-app.get("api/invoice", async (req, res) => {
-  try {
-    const contacts = await xero.accountingApi.getContacts(
-      req.session.activeTenant.tenantId
-    );
-
-    // const where = 'Status=="ACTIVE" AND Type=="SALES"';
-    // const accounts = await xero.accountingApi.getAccounts(req.session.activeTenant.tenantId, null, where);
-    // console.log('accounts: ', accounts.body.accounts);
-
-    const contact = {
-      contactID: contacts.body.contacts[0].contactID,
-    };
-
-    // ************
-
-    const lineItem = {
-      description: "HTML",
-      quantity: 1.0,
-      unitAmount: 200.0,
-      accountCode: "000",
-      // tracking: lineItemTrackings
-    };
-    const lineItems = [];
-    lineItems.push(lineItem);
-
-    // ************
-
-    // const lineItem: LineItem = {
-    // 	accountID: accounts.body.accounts[0].accountID,
-    // 	description: 'consulting',
-    // 	quantity: 1.0,
-    // 	unitAmount: 10.0
-    // };
-
-    const invoice = {
-      lineItems: [lineItem],
-      contact: contact,
-      dueDate: "2021-09-25",
-      date: "2021-09-24",
-      type: Invoice.TypeEnum.ACCREC,
-    };
-    const invoices = {
-      invoices: [invoice],
-    };
-    const response = await xero.accountingApi.createInvoices(
-      req.session.activeTenant.tenantId,
-      invoices
-    );
-    console.log("invoices: ", response.body.invoices);
-    res.json(response.body);
-  } catch (err) {
-    res.json(err);
-  }
-});
-
 app.post("/userInvoice", urlencodedParser, async (req, res) => {
   try {
     // ***********************************************find User
@@ -294,132 +238,16 @@ app.post("/userInvoice", urlencodedParser, async (req, res) => {
       invoices
     );
     console.log("invoices: ", response3.body.invoices);
-    return res.json(response3.body);
-  } catch (err) {
-    return res.json(err);
-  }
-});
 
-app.post("/createInvoice", urlencodedParser, async (req, res) => {
-  try {
-    // ***********************************************find User
-
-    console.log("form body", req.body.email);
-
-    // const response = await axios.post(`${ZAIO_DB_URL}/user`, {
-    //   email: req.body.email,
-    // });
-
-    let response;
-    await axios
-      .post(ZAIO_DB_URL + "/user", { email: req.body.email })
-      .then((res) => {
-        response = res;
-      })
-      .catch((rej) => {
-        return rej;
+    try {
+      const response2 = await axios.post("http://localhost:4000/invoice", {
+        ...response3.body.invoices[0],
+        email: req.body.email,
       });
-
-    let contactID = "9bcfb99a-8865-4b5d-94ca-c6c8c9f054a8";
-
-    const user = response.data.data;
-
-    if (user.xeroContactId) {
-      contactID = user.xeroContactId;
-    } else {
-      //  ********************************************create contact for user
-
-      try {
-        const contact = {
-          name: user.username + "-" + user.email,
-          firstName: user.username,
-          emailAddress: user.email,
-          phones: [
-            {
-              phoneNumber: user.phonenumber,
-              phoneType: Phone.PhoneTypeEnum.MOBILE,
-            },
-          ],
-        };
-        const contacts = {
-          contacts: [contact],
-        };
-        const response = await xero.accountingApi.createContacts(
-          req.session.activeTenant.tenantId,
-          contacts
-        );
-        contactID = response.body.contacts[0].contactID;
-      } catch (err) {
-        return res.json(err);
-      }
-
-      //  ****************************************************** add contactID to user
-
-      try {
-        const response2 = await axios.post(`${ZAIO_DB_URL}/addXeroContactId`, {
-          email: user.email,
-          contactID,
-        });
-      } catch (err) {
-        return res.json(err);
-      }
+    } catch (err) {
+      return res.json(err);
     }
 
-    // *****************************************************create Invoice for user
-
-    const contact = {
-      contactID: contactID,
-    };
-
-    // ************
-
-    const lineItem = {
-      description: req.body.description,
-      quantity: req.body.quantity,
-      unitAmount: req.body.unitPrice,
-      accountCode: "000",
-      taxType: "OUTPUT",
-      taxAmount: req.body.quantity * req.body.unitPrice * 0.12,
-      // tracking: lineItemTrackings
-    };
-    const lineItems = [];
-    lineItems.push(lineItem);
-
-    // ************
-
-    // const lineItem: LineItem = {
-    // 	accountID: accounts.body.accounts[0].accountID,
-    // 	description: 'consulting',
-    // 	quantity: 1.0,
-    // 	unitAmount: 10.0
-    // };
-
-    const date = new Date();
-
-    let day = date.getDate();
-    let month = date.getMonth() + 1;
-    let year = date.getFullYear();
-
-    // This arrangement can be altered based on how we want the date's format to appear.
-    let currentDate = `${year}-${month}-${day}`;
-
-    console.log(currentDate);
-
-    const invoice = {
-      lineItems: [lineItem],
-      contact: contact,
-      dueDate: currentDate,
-      date: currentDate,
-      type: Invoice.TypeEnum.ACCREC,
-    };
-    const invoices = {
-      invoices: [invoice],
-    };
-    const response3 = await xero.accountingApi.createInvoices(
-      req.session.activeTenant.tenantId,
-      invoices
-    );
-    console.log("invoices: ", response3.body.invoices);
     return res.json(response3.body);
   } catch (err) {
     return res.json(err);
@@ -479,6 +307,7 @@ app.post("/api/createInvoice", urlencodedParser, async (req, res) => {
       req.session.activeTenant.tenantId,
       invoices
     );
+
     console.log("invoices: ", response3.body.invoices);
     return res.json(response3.body);
   } catch (err) {
@@ -510,34 +339,6 @@ app.post("/api/contact", urlencodedParser, async (req, res) => {
     return res.json(contactID);
   } catch (err) {
     return res.json(err);
-  }
-});
-
-app.post("api/contactone", async (req, res) => {
-  try {
-    const contact = {
-      name: req.body,
-      firstName: req.body,
-      lastName: req.body,
-      emailAddress: req.body,
-      // phones: [
-      // 	{
-      // 		phoneNumber:'555-555-5555',
-      // 		phoneType: Phone.PhoneTypeEnum.MOBILE
-      // 	}
-      // ]
-    };
-    const contacts = {
-      contacts: [contact],
-    };
-    console.log(contact, "ccc testing---");
-    const response = await xero.accountingApi.createContacts(
-      req.session.activeTenant.tenantId,
-      contacts
-    );
-    res.json(response.body);
-  } catch (err) {
-    res.json(err);
   }
 });
 

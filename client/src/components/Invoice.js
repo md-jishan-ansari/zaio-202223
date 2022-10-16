@@ -94,8 +94,19 @@ const Invoice = (props) => {
     } else {
       xeroActions
         .createInvoice({ ...state, xeroContactId: user.xeroContactId })
-        .then((res) => {
+        .then(async (res) => {
           console.log(res, "react console");
+          try {
+            const response2 = await axios.post(
+              "http://localhost:4000/invoice",
+              {
+                ...res.invoices[0],
+                email: user.email,
+              }
+            );
+          } catch (err) {
+            return res.json(err);
+          }
         });
     }
 
