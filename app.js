@@ -422,7 +422,7 @@ app.post("/createInvoice", urlencodedParser, async (req, res) => {
   }
 });
 
-app.get("/api/createInvoice", urlencodedParser, async (req, res) => {
+app.post("/api/createInvoice", urlencodedParser, async (req, res) => {
   try {
     const contact = {
       contactID: req.body.xeroContactId,
@@ -480,7 +480,7 @@ app.get("/api/createInvoice", urlencodedParser, async (req, res) => {
   }
 });
 
-app.get("/api/contact", urlencodedParser, async (req, res) => {
+app.post("/api/contact", urlencodedParser, async (req, res) => {
   try {
     const contact = {
       name: req.body.username + "-" + req.body.email,
