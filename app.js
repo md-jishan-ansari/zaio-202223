@@ -422,18 +422,73 @@ app.post("/createInvoice", urlencodedParser, async (req, res) => {
   }
 });
 
+app.get("api/createInvoice", urlencodedParser, async (req, res) => {
+  try {
+    const contact = {
+      contactID: req.body.contactID,
+    };
+
+    // ************
+    const lineItem = {
+      description: req.body.description,
+      quantity: req.body.quantity,
+      unitAmount: req.body.unitPrice,
+      accountCode: "000",
+      // tracking: lineItemTrackings
+    };
+    const lineItems = [];
+    lineItems.push(lineItem);
+
+    // ************
+
+    // const lineItem: LineItem = {
+    // 	accountID: accounts.body.accounts[0].accountID,
+    // 	description: 'consulting',
+    // 	quantity: 1.0,
+    // 	unitAmount: 10.0
+    // };
+
+    const date = new Date();
+
+    let day = date.getDate();
+    let month = date.getMonth() + 1;
+    let year = date.getFullYear();
+
+    // This arrangement can be altered based on how we want the date's format to appear.
+    let currentDate = `${year}-${month}-${day}`;
+
+    console.log(currentDate);
+
+    const invoice = {
+      lineItems: [lineItem],
+      contact: contact,
+      dueDate: currentDate,
+      date: currentDate,
+      type: Invoice.TypeEnum.ACCREC,
+    };
+    const invoices = {
+      invoices: [invoice],
+    };
+    const response3 = await xero.accountingApi.createInvoices(
+      req.session.activeTenant.tenantId,
+      invoices
+    );
+    console.log("invoices: ", response3.body.invoices);
+    return res.json(response3.body);
+  } catch (err) {
+    return res.json(err);
+  }
+});
+
 app.get("api/contact", urlencodedParser, async (req, res) => {
   try {
-    console.log(req.body.fname);
-
     const contact = {
-      name: "abcd4",
-      firstName: "lasttest",
-      lastName: "lasttest22",
-      emailAddress: "lasttest@gmail.com",
+      name: req.body.username + "-" + req.body.email,
+      firstName: req.body.username,
+      emailAddress: req.body.email,
       phones: [
         {
-          phoneNumber: "555-555-5555",
+          phoneNumber: req.body.phonenumber,
           phoneType: Phone.PhoneTypeEnum.MOBILE,
         },
       ],
@@ -445,10 +500,10 @@ app.get("api/contact", urlencodedParser, async (req, res) => {
       req.session.activeTenant.tenantId,
       contacts
     );
-    console.log("contacts: ", response.body.contacts[0].contactID);
-    res.json(response.body.contacts[0].contactID);
+    const contactID = response.body.contacts[0].contactID;
+    return res.json(contactID);
   } catch (err) {
-    res.json(err);
+    return res.json(err);
   }
 });
 

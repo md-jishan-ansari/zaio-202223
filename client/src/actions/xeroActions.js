@@ -7,6 +7,33 @@ const API_URL = "http://localhost:4000";
 const XERO_URL = "";
 
 const invoice = {
+  getUser(email) {
+    return axios
+      .post(API_URL + "/user", { email: email })
+      .then((res) => {
+        console.log(res.data, "res.data[0]");
+        return res.data;
+      })
+      .catch((rej) => {
+        return rej;
+      });
+  },
+
+  addXeroContactId(userData) {
+    return axios
+      .post(API_URL + "/addXeroContactId", {
+        email: userData.email,
+        contactID: userData.contactID,
+      })
+      .then((res) => {
+        console.log(res.data, "res.data[0]");
+        return res.data;
+      })
+      .catch((rej) => {
+        return rej;
+      });
+  },
+
   userTutorAccount() {
     return axios
       .get(API_URL + "/usertutoraccount")
@@ -21,9 +48,7 @@ const invoice = {
 
   createContact(userData) {
     return axios
-      .get(XERO_URL + "/contact", {
-        headers: { "Content-Type": "application/json" },
-      })
+      .post("api/contact", userData)
       .then((res) => {
         console.log(res, "action res");
         return res.data;
@@ -35,7 +60,7 @@ const invoice = {
 
   createInvoice(userData) {
     return axios
-      .post("/createInvoice", userData)
+      .post("api/createInvoice", userData)
       .then((res) => {
         console.log(res, "action res");
         return res.data;

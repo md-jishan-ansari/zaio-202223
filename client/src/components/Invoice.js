@@ -1,3 +1,4 @@
+import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { Form, Button } from "react-bootstrap";
 
@@ -12,6 +13,7 @@ const Invoice = (props) => {
     description: "",
     quantity: "",
     unitPrice: "",
+    xeroContactId: "",
   });
 
   // ******************************************
@@ -64,13 +66,26 @@ const Invoice = (props) => {
     }));
   };
 
-  const handleOnSubmit = (event) => {
+  const handleOnSubmit = async (event) => {
     event.preventDefault();
 
+    const response = await xeroActions.getUser(state.email);
+    const user = response.data;
+
+    console.log(user, "user");
+
+    if (!user.xeroContactId) {
+      const response = await xeroActions.createContact(user);
+      setState((prevState) => ({
+        ...prevState,
+        ["xeroContactId"]: response,
+      }));
+    }
+
     console.log(state);
-    xeroActions.createInvoice(state).then((res) => {
-      console.log(res, "react console");
-    });
+    // xeroActions.createInvoice(state).then((res) => {
+    //   console.log(res, "react console");
+    // });
   };
 
   return (
