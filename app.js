@@ -252,6 +252,8 @@ app.post("/userInvoice", urlencodedParser, async (req, res) => {
       quantity: req.body.quantity,
       unitAmount: req.body.unitPrice,
       accountCode: "000",
+      taxType: "OUTPUT",
+      taxAmount: req.body.quantity * req.body.unitPrice * 0.12,
       // tracking: lineItemTrackings
     };
     const lineItems = [];
@@ -376,6 +378,8 @@ app.post("/createInvoice", urlencodedParser, async (req, res) => {
       quantity: req.body.quantity,
       unitAmount: req.body.unitPrice,
       accountCode: "000",
+      taxType: "OUTPUT",
+      taxAmount: req.body.quantity * req.body.unitPrice * 0.12,
       // tracking: lineItemTrackings
     };
     const lineItems = [];
@@ -434,6 +438,8 @@ app.post("/api/createInvoice", urlencodedParser, async (req, res) => {
       quantity: req.body.quantity,
       unitAmount: req.body.unitPrice,
       accountCode: "000",
+      taxType: "OUTPUT",
+      taxAmount: req.body.quantity * req.body.unitPrice * 0.12,
       // tracking: lineItemTrackings
     };
     const lineItems = [];
