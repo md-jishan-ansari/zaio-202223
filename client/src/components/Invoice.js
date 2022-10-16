@@ -78,16 +78,14 @@ const Invoice = (props) => {
         .createContact(user)
         .then(async (response) => {
           console.log(response, "contact created");
-          setState((prevState) => ({
-            ...prevState,
-            ["xeroContactId"]: response,
-          }));
 
-          await xeroActions.addXeroContactId(state).then((response) => {
-            xeroActions.createInvoice(state).then((res) => {
-              console.log(res, "react console");
+          await xeroActions
+            .addXeroContactId({ email: state.email, contactID: response })
+            .then((response) => {
+              xeroActions.createInvoice(state).then((res) => {
+                console.log(res, "react console");
+              });
             });
-          });
         })
         .catch((error) => {
           console.log(error);

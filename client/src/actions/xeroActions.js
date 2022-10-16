@@ -22,10 +22,7 @@ const invoice = {
   addXeroContactId(userData) {
     console.log(userData, "addXeroContactId");
     return axios
-      .post(API_URL + "/addXeroContactId", {
-        email: userData.email,
-        contactID: userData.xeroContactId,
-      })
+      .post(API_URL + "/addXeroContactId", userData)
       .then((res) => {
         console.log(res.data, "res.data[0]");
         return res.data;
