@@ -49,7 +49,7 @@ const invoice = {
   createContact(userData) {
     console.log(userData, "createContact");
     return axios
-      .post("api/contact", userData)
+      .post("/api/contact", userData)
       .then((res) => {
         console.log(res, "createContact2");
         return res.data;
@@ -62,7 +62,7 @@ const invoice = {
   createInvoice(userData) {
     console.log(userData, "for createInvoice");
     return axios
-      .post("api/createInvoice", userData)
+      .post("/api/createInvoice", userData)
       .then((res) => {
         console.log(res, "action res");
         return res.data;
